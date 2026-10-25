@@ -44,6 +44,40 @@ describe("Question 1 — loan application form", () => {
   });
 });
 
+// A browser serialises file inputs as multipart bodies; jsdom's FormData
+// stringifies File entries when passed to Request, so we build the raw
+// multipart body ourselves — byte-for-byte what the browser would send.
+function multipartBody(
+  fields: Record<string, string>,
+  files: Array<{ name: string; filename: string; type: string }>,
+): string {
+  const boundary = "----lovable-test-boundary";
+  const parts = Object.entries(fields).flatMap(([key, value]) => [
+    `--${boundary}`,
+    `Content-Disposition: form-data; name="${key}"`,
+    "",
+    value,
+  ]);
+  const fileParts = files.flatMap((file) => [
+    `--${boundary}`,
+    `Content-Disposition: form-data; name="${file.name}"; filename="${file.filename}"`,
+    `Content-Type: ${file.type}`,
+    "",
+    "supporting document contents",
+  ]);
+  return [...parts, ...fileParts, `--${boundary}--`, ""].join("\r\n");
+}
+
+function loanRequest(fields: Record<string, string>): Request {
+  return new Request("http://localhost/loan-application", {
+    method: "POST",
+    headers: { "Content-Type": `multipart/form-data; boundary=----lovable-test-boundary` },
+    body: multipartBody(fields, [
+      { name: "documents", filename: "payslip.pdf", type: "application/pdf" },
+    ]),
+  });
+}
+
 describe("Question 2 — GET vs POST handlers", () => {
   it("POST handler echoes complete data and returns a clean URL confirmation", async () => {
     const form = new FormData();
