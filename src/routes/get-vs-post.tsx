@@ -4,18 +4,20 @@ import { escapeHtml, htmlDocument } from "@/lib/html-response";
 type DemoSearch = {
   fullname?: string;
   email?: string;
-  amount?: string;
+  amount?: string | number;
 };
 
 export const Route = createFileRoute("/get-vs-post")({
   validateSearch: (search: Record<string, unknown>): DemoSearch => {
     // The router parses search values with JSON semantics, so a numeric
-    // field arrives as a number ("amount=5000" -> 5000) — accept both.
+    // field arrives as a number ("amount=5000" -> 5000). Keep it a number
+    // so the router re-serialises it cleanly in the URL.
     const pick = (key: string) => {
       const value = search[key];
-      return (typeof value === "string" || typeof value === "number") && value !== ""
-        ? String(value)
-        : undefined;
+      if (value === "" || value === undefined) return undefined;
+      if (typeof value === "number") return value;
+      if (typeof value === "string") return value;
+      return undefined;
     };
     return { fullname: pick("fullname"), email: pick("email"), amount: pick("amount") };
   },
@@ -86,7 +88,7 @@ function GetVsPostPage() {
     Object.entries({
       fullname: search.fullname ?? "",
       email: search.email ?? "",
-      amount: search.amount ?? "",
+      amount: search.amount === undefined ? "" : String(search.amount),
     }).filter(([, value]) => value !== ""),
   ).toString();
 
