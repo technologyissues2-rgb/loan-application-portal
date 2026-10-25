@@ -109,8 +109,8 @@ describe("Question 2 — GET vs POST handlers", () => {
     });
     const handler = LoanRoute.options.server?.handlers?.POST;
     const response = await handler!({ request } as never);
-    expect(response.status).toBe(200);
     const html = await response.text();
+    expect(response.status, html.slice(0, 800)).toBe(200);
     expect(html).toContain("Amina Wanjiru");
     expect(html).toContain("payslip.pdf");
   });
