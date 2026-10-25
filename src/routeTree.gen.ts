@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GetVsPostRouteImport } from './routes/get-vs-post'
+import { Route as LoanApplicationRouteImport } from './routes/loan-application'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GetVsPostRoute = GetVsPostRouteImport.update({
+  id: '/get-vs-post',
+  path: '/get-vs-post',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoanApplicationRoute = LoanApplicationRouteImport.update({
+  id: '/loan-application',
+  path: '/loan-application',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/get-vs-post': typeof GetVsPostRoute
+  '/loan-application': typeof LoanApplicationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/get-vs-post': typeof GetVsPostRoute
+  '/loan-application': typeof LoanApplicationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/get-vs-post': typeof GetVsPostRoute
+  '/loan-application': typeof LoanApplicationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/get-vs-post' | '/loan-application'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/get-vs-post' | '/loan-application'
+  id: '__root__' | '/' | '/get-vs-post' | '/loan-application'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GetVsPostRoute: typeof GetVsPostRoute
+  LoanApplicationRoute: typeof LoanApplicationRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/get-vs-post': {
+      id: '/get-vs-post'
+      path: '/get-vs-post'
+      fullPath: '/get-vs-post'
+      preLoaderRoute: typeof GetVsPostRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loan-application': {
+      id: '/loan-application'
+      path: '/loan-application'
+      fullPath: '/loan-application'
+      preLoaderRoute: typeof LoanApplicationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GetVsPostRoute: GetVsPostRoute,
+  LoanApplicationRoute: LoanApplicationRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

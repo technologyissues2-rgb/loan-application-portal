@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 import { z } from "zod";
 import { escapeHtml, htmlDocument } from "@/lib/html-response";
 
@@ -192,7 +193,7 @@ function LoanApplicationPage() {
                 type="tel"
                 name="phone"
                 required
-                pattern="(\\+254|0)[17][0-9]{8}"
+                pattern="(\+254|0)[17][0-9]{8}"
                 title="Use a Kenyan number, e.g. 0712345678 or +254712345678"
                 placeholder="e.g. 0712345678"
                 className={inputClass}
@@ -300,7 +301,7 @@ function Field({
 }: {
   label: string;
   hint: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <label className="block">

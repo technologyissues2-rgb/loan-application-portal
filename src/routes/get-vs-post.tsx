@@ -330,7 +330,7 @@ function CodeBlock({ caption, code }: { caption: string; code: string }) {
       <figcaption className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
         {caption}
       </figcaption>
-      <pre className="mt-2 overflow-x-auto rounded-lg border bg-[oklch(0.24_0.025_140)] p-4 text-sm leading-relaxed text-[oklch(0.95_0.01_100)]">
+      <pre className="mt-2 overflow-x-auto rounded-lg border bg-foreground p-4 text-sm leading-relaxed text-background">
         <code>{code}</code>
       </pre>
     </figure>
