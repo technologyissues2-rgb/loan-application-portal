@@ -109,22 +109,18 @@ describe("Question 2 — GET vs POST handlers", () => {
   });
 
   it("loan POST handler rejects an out-of-range loan amount", async () => {
-    const form = new FormData();
-    form.set("name", "Amina Wanjiru");
-    form.set("nationalId", "34567890");
-    form.set("phone", "0712345678");
-    form.set("email", "amina@example.com");
-    form.set("employmentStatus", "employed");
-    form.set("loanAmount", "50");
-    form.set("documents", new File(["doc"], "payslip.pdf", { type: "application/pdf" }));
-    const request = new Request("http://localhost/loan-application", {
-      method: "POST",
-      body: form,
+    const request = loanRequest({
+      name: "Amina Wanjiru",
+      nationalId: "34567890",
+      phone: "0712345678",
+      email: "amina@example.com",
+      employmentStatus: "employed",
+      loanAmount: "50",
     });
     const handler = LoanRoute.options.server?.handlers?.POST;
     const response = await handler!({ request } as never);
-    expect(response.status).toBe(400);
     const html = await response.text();
+    expect(response.status, html.slice(0, 800)).toBe(400);
     expect(html).toContain("KES 1,000");
   });
 
