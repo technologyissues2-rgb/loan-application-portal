@@ -26,7 +26,7 @@ describe("Question 1 — loan application form", () => {
   });
 
   it("marks every captured field required", () => {
-    render(LoanRoute.options.component!());
+    render(LoanRoute.options.component!({} as never));
     for (const name of [
       "name",
       "nationalId",
@@ -41,7 +41,7 @@ describe("Question 1 — loan application form", () => {
   });
 
   it("applies the validation attributes the brief asks for", () => {
-    render(LoanRoute.options.component!());
+    render(LoanRoute.options.component!({} as never));
     expect(loanInput("nationalId")?.getAttribute("pattern")).toBe("[0-9]{7,10}");
     expect(loanInput("phone")?.getAttribute("pattern")).toBe("(\\+254|0)[17][0-9]{8}");
     expect(loanInput("email")?.getAttribute("type")).toBe("email");
@@ -95,7 +95,7 @@ describe("Question 2 — GET vs POST handlers", () => {
       method: "POST",
       body: form,
     });
-    const handler = GetVsPostRoute.options.server?.handlers?.POST;
+    const handler = serverHandler(GetVsPostRoute);
     const response = await handler!({ request } as never);
     expect(response.status).toBe(200);
     const html = await response.text();
@@ -110,7 +110,7 @@ describe("Question 2 — GET vs POST handlers", () => {
       method: "POST",
       body: form,
     });
-    const handler = GetVsPostRoute.options.server?.handlers?.POST;
+    const handler = serverHandler(GetVsPostRoute);
     const response = await handler!({ request } as never);
     expect(response.status).toBe(400);
   });
@@ -124,7 +124,7 @@ describe("Question 2 — GET vs POST handlers", () => {
       employmentStatus: "employed",
       loanAmount: "50",
     });
-    const handler = LoanRoute.options.server?.handlers?.POST;
+    const handler = serverHandler(LoanRoute);
     const response = await handler!({ request } as never);
     const html = await response.text();
     expect(response.status, html.slice(0, 800)).toBe(400);
@@ -140,7 +140,7 @@ describe("Question 2 — GET vs POST handlers", () => {
       employmentStatus: "employed",
       loanAmount: "50000",
     });
-    const handler = LoanRoute.options.server?.handlers?.POST;
+    const handler = serverHandler(LoanRoute);
     const response = await handler!({ request } as never);
     const html = await response.text();
     expect(response.status, html.slice(0, 800)).toBe(200);
