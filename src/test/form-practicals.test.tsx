@@ -4,6 +4,13 @@ import { describe, expect, it } from "vitest";
 import { Route as GetVsPostRoute } from "@/routes/get-vs-post";
 import { Route as LoanRoute } from "@/routes/loan-application";
 
+type PostHandler = (ctx: { request: Request }) => Promise<Response>;
+
+// The generated handler types are a union (object or createHandlers form);
+// our routes use the plain object form, so cast through unknown.
+const serverHandler = (route: { options: { server?: { handlers?: unknown } } }): PostHandler =>
+  (route.options.server?.handlers as Record<string, PostHandler>)["POST"]!;
+
 const loanInput = (name: string) =>
   LoanRoute.options.component !== undefined
     ? document.querySelector(`form [name="${name}"]`)
