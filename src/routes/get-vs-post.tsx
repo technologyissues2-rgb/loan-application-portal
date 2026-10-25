@@ -9,8 +9,14 @@ type DemoSearch = {
 
 export const Route = createFileRoute("/get-vs-post")({
   validateSearch: (search: Record<string, unknown>): DemoSearch => {
-    const pick = (key: string) =>
-      typeof search[key] === "string" && search[key] !== "" ? (search[key] as string) : undefined;
+    // The router parses search values with JSON semantics, so a numeric
+    // field arrives as a number ("amount=5000" -> 5000) — accept both.
+    const pick = (key: string) => {
+      const value = search[key];
+      return (typeof value === "string" || typeof value === "number") && value !== ""
+        ? String(value)
+        : undefined;
+    };
     return { fullname: pick("fullname"), email: pick("email"), amount: pick("amount") };
   },
   server: {
