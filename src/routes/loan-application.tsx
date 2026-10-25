@@ -11,7 +11,14 @@ export const Route = createFileRoute("/loan-application")({
 
         const documents = form
           .getAll("documents")
-          .filter((entry): entry is File => entry instanceof File && entry.size > 0);
+          .filter(
+            (entry): entry is File =>
+              !!entry &&
+              typeof entry === "object" &&
+              "size" in entry &&
+              "name" in entry &&
+              (entry as File).size > 0,
+          );
 
         const parsed = loanSchema.safeParse({
           name: form.get("name") ?? "",

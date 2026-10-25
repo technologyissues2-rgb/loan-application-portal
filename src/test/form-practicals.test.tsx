@@ -111,7 +111,7 @@ describe("Question 2 — GET vs POST handlers", () => {
     const response = await handler!({ request } as never);
     expect(response.status).toBe(200);
     const html = await response.text();
-    if (response.status !== 200) process.stdout.write(`REJECTED HTML: ${html}\n`);
+    expect(html).toContain("Amina Wanjiru");
     expect(html).toContain("payslip.pdf");
   });
 });
