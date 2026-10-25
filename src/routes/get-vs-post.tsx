@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { escapeHtml, htmlDocument } from "@/lib/html-response";
 
 type DemoSearch = {
-  fullname?: string | undefined;
-  email?: string | undefined;
+  fullname?: string | number | undefined;
+  email?: string | number | undefined;
   amount?: string | number | undefined;
 };
 
@@ -86,8 +86,8 @@ function GetVsPostPage() {
 
   const queryString = new URLSearchParams(
     Object.entries({
-      fullname: search.fullname ?? "",
-      email: search.email ?? "",
+      fullname: search.fullname === undefined ? "" : String(search.fullname),
+      email: search.email === undefined ? "" : String(search.email),
       amount: search.amount === undefined ? "" : String(search.amount),
     }).filter(([, value]) => value !== ""),
   ).toString();
