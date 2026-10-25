@@ -2,9 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { escapeHtml, htmlDocument } from "@/lib/html-response";
 
 type DemoSearch = {
-  fullname?: string;
-  email?: string;
-  amount?: string | number;
+  fullname?: string | undefined;
+  email?: string | undefined;
+  amount?: string | number | undefined;
 };
 
 export const Route = createFileRoute("/get-vs-post")({

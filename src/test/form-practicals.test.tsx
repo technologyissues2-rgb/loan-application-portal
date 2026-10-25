@@ -18,7 +18,7 @@ const loanInput = (name: string) =>
 
 describe("Question 1 — loan application form", () => {
   it("submits via POST to the same URL with multipart encoding", () => {
-    render(LoanRoute.options.component!());
+    render(LoanRoute.options.component!({} as never));
     const form = document.querySelector("form");
     expect(form?.getAttribute("method")).toBe("post");
     expect(form?.getAttribute("action")).toBe("/loan-application");
